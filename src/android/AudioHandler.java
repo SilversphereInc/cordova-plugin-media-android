@@ -62,10 +62,8 @@ public class AudioHandler extends CordovaPlugin {
     private int origVolumeStream = -1;
     private CallbackContext messageChannel;
 
-
-    public static String [] permissions = { Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    public static String [] permissions = { Manifest.permission.RECORD_AUDIO };
     public static int RECORD_AUDIO = 0;
-    public static int WRITE_EXTERNAL_STORAGE = 1;
 
     public static final int PERMISSION_DENIED_ERROR = 20;
 
@@ -85,17 +83,10 @@ public class AudioHandler extends CordovaPlugin {
         return cordova.getActivity().getApplicationContext();
     }
 
-    protected void getWritePermission(int requestCode)
-    {
-        PermissionHelper.requestPermission(this, requestCode, permissions[WRITE_EXTERNAL_STORAGE]);
-    }
-
-
     protected void getMicPermission(int requestCode)
     {
         PermissionHelper.requestPermission(this, requestCode, permissions[RECORD_AUDIO]);
     }
-
 
     /**
      * Executes the request and returns PluginResult.
@@ -562,13 +553,8 @@ public class AudioHandler extends CordovaPlugin {
 
     private void promptForRecord()
     {
-        if(PermissionHelper.hasPermission(this, permissions[WRITE_EXTERNAL_STORAGE])  &&
-                PermissionHelper.hasPermission(this, permissions[RECORD_AUDIO])) {
+        if(PermissionHelper.hasPermission(this, permissions[RECORD_AUDIO])) {
             this.startRecordingAudio(recordId, FileHelper.stripFileProtocol(fileUriStr));
-        }
-        else if(PermissionHelper.hasPermission(this, permissions[RECORD_AUDIO]))
-        {
-            getWritePermission(WRITE_EXTERNAL_STORAGE);
         }
         else
         {
